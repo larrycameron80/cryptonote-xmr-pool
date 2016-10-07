@@ -243,7 +243,7 @@ Explanation for each field:
     "interval": 600, //how often to run in seconds
     "maxAddresses": 50, //split up payments if sending to more than this many addresses
     "mixin": 3, //number of transactions yours is indistinguishable from
-    "transferFee": 5000000000, //fee to pay for each transaction
+    "transferFee": 1000000000, //fee to pay for each transaction
     "minPayment": 100000000000, //miner balance required before sending payment
     "maxTransactionAmount": 0, //split transactions by this amount(to prevent "too big transaction" error)
     "denomination": 100000000000 //truncate to this precision and store remainder
@@ -381,6 +381,7 @@ This software contains four distinct modules:
 * `api` - Used by the website to display network, pool and miners' data
 * `unlocker` - Processes block candidates and increases miners' balances when blocks are unlocked
 * `payments` - Sends out payments to miners according to their balances stored in redis
+* `-module=chartsDataCollector` - Make your charts work
 
 
 By default, running the `init.js` script will start up all four modules. You can optionally have the script start
