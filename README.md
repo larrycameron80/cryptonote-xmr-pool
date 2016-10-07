@@ -203,12 +203,12 @@ Explanation for each field:
        individual miners based on their hashrate in order to lower networking and CPU
        overhead. */
     "varDiff": {
-        "minDiff": 2, //Minimum difficulty
-        "maxDiff": 100000,
-        "targetTime": 100, //Try to get 1 share per this many seconds
-        "retargetTime": 30, //Check to see if we should retarget every this many seconds
+        "minDiff": 10, //Minimum difficulty
+        "maxDiff": 200000,
+        "targetTime": 30, //Try to get 1 share per this many seconds
+        "retargetTime": 60, //Check to see if we should retarget every this many seconds
         "variancePercent": 30, //Allow time to very this % from target without retargeting
-        "maxJump": 100 //Limit diff percent increase/decrease in a single retargetting
+        "maxJump": 20 //Limit diff percent increase/decrease in a single retargetting
     },
 
     /* Set difficulty on miner client side by passing <address> param with .<difficulty> postfix
