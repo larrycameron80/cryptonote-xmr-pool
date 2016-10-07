@@ -9,9 +9,13 @@ require('./lib/configReader.js');
 
 require('./lib/logger.js');
 
+var apiInterfaces = require('./lib/apiInterfaces.js')(config.daemon, config.wallet, config.api);
 
 global.redisClient = redis.createClient(config.redis.port, config.redis.host);
 
+/* Height vars */
+var blockHeight = 0;
+var hash = null;
 
 if (cluster.isWorker){
     switch(process.env.workerType){
@@ -150,7 +154,6 @@ function spawnPoolWorkers(){
         return;
     }
 
-
     var numForks = (function(){
         if (!config.poolServer.clusterForks)
             return 1;
@@ -198,6 +201,67 @@ function spawnPoolWorkers(){
             log('info', logSystem, 'Pool spawned on %d thread(s)', [numForks]);
         }
     }, 10);
+
+
+    // Start block height monitor
+    log('info', logSystem, 'Starting block height monitor');
+
+    function getBlockHeight(callback){
+        apiInterfaces.rpcOther('getheight', callback);
+    }
+
+    function getLastBlockHeader(callback) {
+        apiInterfaces.rpcDaemon('getlastblockheader', {}, callback);
+    }
+
+    setInterval(function(){
+        getLastBlockHeader(function(error, result) {
+            if(!error) {
+
+                if((hash != result.block_header.hash)) {
+
+                    hash = result.block_header.hash;
+
+                    if(hash !== null) {
+                        log('info', logSystem, 'Notifying pool of new block %d', [result.block_header.height + 1]);
+
+                        Object.keys(cluster.workers).forEach(function (id) {
+                            if (cluster.workers[id].type === 'pool') {
+                                cluster.workers[id].send({type: 'newBlock', height: result.block_header.height + 1});
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    }, 1000); // Check every 1 ms
+
+    /**
+     * Check by block height
+     */
+    /*
+    setInterval(function(){
+        getBlockHeight(function(error, result) {
+            if(!error) {
+
+                if((blockHeight != result.height)) {
+
+                    blockHeight = result.height;
+
+                    if(blockHeight > 0) {
+                        log('info', logSystem, 'Notifying pool of new block %d', [blockHeight]);
+
+                        Object.keys(cluster.workers).forEach(function (id) {
+                            if (cluster.workers[id].type === 'pool') {
+                                cluster.workers[id].send({type: 'newBlock', height: blockHeight});
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    }, 1000);
+    */
 }
 
 function spawnBlockUnlocker(){
