@@ -203,12 +203,12 @@ Explanation for each field:
        individual miners based on their hashrate in order to lower networking and CPU
        overhead. */
     "varDiff": {
-        "minDiff": 2, //Minimum difficulty
-        "maxDiff": 100000,
-        "targetTime": 100, //Try to get 1 share per this many seconds
-        "retargetTime": 30, //Check to see if we should retarget every this many seconds
+        "minDiff": 10, //Minimum difficulty
+        "maxDiff": 200000,
+        "targetTime": 30, //Try to get 1 share per this many seconds
+        "retargetTime": 60, //Check to see if we should retarget every this many seconds
         "variancePercent": 30, //Allow time to very this % from target without retargeting
-        "maxJump": 100 //Limit diff percent increase/decrease in a single retargetting
+        "maxJump": 20 //Limit diff percent increase/decrease in a single retargetting
     },
 
     /* Set difficulty on miner client side by passing <address> param with .<difficulty> postfix
@@ -243,7 +243,7 @@ Explanation for each field:
     "interval": 600, //how often to run in seconds
     "maxAddresses": 50, //split up payments if sending to more than this many addresses
     "mixin": 3, //number of transactions yours is indistinguishable from
-    "transferFee": 5000000000, //fee to pay for each transaction
+    "transferFee": 1000000000, //fee to pay for each transaction
     "minPayment": 100000000000, //miner balance required before sending payment
     "maxTransactionAmount": 0, //split transactions by this amount(to prevent "too big transaction" error)
     "denomination": 100000000000 //truncate to this precision and store remainder
@@ -381,6 +381,7 @@ This software contains four distinct modules:
 * `api` - Used by the website to display network, pool and miners' data
 * `unlocker` - Processes block candidates and increases miners' balances when blocks are unlocked
 * `payments` - Sends out payments to miners according to their balances stored in redis
+* `-module=chartsDataCollector` - Make your charts work
 
 
 By default, running the `init.js` script will start up all four modules. You can optionally have the script start
