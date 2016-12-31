@@ -89,8 +89,7 @@
         "depth": 60,
         "poolFee": 2,
         "devDonation": 0.1,
-        "coreDevDonation": 0.1,
-        "extraFeaturesDevDonation":0.1
+        "coreDevDonation": 0.1
     },
 
     "api": {
@@ -109,7 +108,7 @@
     },
 
     "daemon": {
-        "host": "127.0.0.1",
+        "host": "333.333.333.333",
         "port": 18081
     },
 
