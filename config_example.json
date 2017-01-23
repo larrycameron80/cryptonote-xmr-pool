@@ -1,7 +1,7 @@
 {
     "coin": "monero",
     "symbol": "XMR",
-    "coinUnits": 1000000000000,,
+    "coinUnits": 1000000000000,
     "coinDifficultyTarget": 120,
 
     "logging": {
